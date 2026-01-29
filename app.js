@@ -1,3 +1,4 @@
+// app.js
 const selText = document.getElementById("selText");
 const timebar = document.getElementById("timebar");
 const sbLeft = document.getElementById("sbLeft");
@@ -17,6 +18,7 @@ const gateBehind = document.getElementById("gateBehind");
 const gateFront = document.getElementById("gateFront");
 const triLeft = document.getElementById("triLeft");
 const triRight = document.getElementById("triRight");
+const gateNotice = document.getElementById("gateNotice");
 
 function pad(n){ return String(n).padStart(2, "0"); }
 function dayJP(d){ return ["日","月","火","水","木","金","土"][d.getDay()]; }
@@ -36,12 +38,12 @@ setInterval(tickTime, 50);
 
 // ✅ GATE 뒤 배경색(6구간)
 const fixedColors = [
-  "#2B79B8", // 0~1/12
-  "#3A9AA3", // 1/12~2/12
-  "#3A9C88", // 2/12~3/12
-  "#8DB66A", // 3/12~4/12
-  "#F3EA63", // 4/12~5/12
-  "#E65752", // 5/12~1
+  "#2B79B8",
+  "#3A9AA3",
+  "#3A9C88",
+  "#8DB66A",
+  "#F3EA63",
+  "#E65752",
 ];
 function colorFromProgress(p){
   const t = Math.max(0, Math.min(1, p));
@@ -76,6 +78,8 @@ function stopArrowBlink(){
 // ✅ Dynamic Island 상태
 let islandResetTimer = null;
 function setIslandMode(mode, text){
+  if (!island || !islandDot || !islandText) return; // ✅ 안전 가드
+
   island.classList.remove("mode-gate","mode-done");
   if (mode) island.classList.add(mode);
   islandText.textContent = text ?? "REC";
@@ -103,26 +107,28 @@ ticketBtn.addEventListener("click", () => {
   selText.textContent = selected ? "1/1" : "0/1";
 
   ticketBtn.classList.toggle("selected", selected);
+
+  // 헤더 색 직접 조작(원본 느낌)
   ticketHeader.style.background = selected ? "var(--pink)" : "#fff";
   ticketHeader.style.color = selected ? "#fff" : "#111";
-  ticketHeader.style.borderBottom = selected ? "none" : "1px dashed rgba(0,0,0,.25)";
+  ticketHeader.style.borderBottom = selected ? "none" : "2px dashed rgba(0,0,0,.22)";
 
-  if (selected) {
-    openGate();
-  } else {
-    closeGate(true);
-  }
+  if (selected) openGate();
+  else closeGate(true);
 });
 
 // ✅ GATE 열기/닫기
 function openGate(){
   gateWrap.classList.add("open");
   gateWrap.setAttribute("aria-hidden","false");
+
   gateFront.style.transform = "translateX(0px)";
   gateBehind.style.background = fixedColors[0];
 
+  // ✅ 노란 안내바 표시(화면 상단 fixed)
   gateNotice.style.display = "block";
-  
+  gateNotice.setAttribute("aria-hidden","false");
+
   startArrowBlink();
   setIslandMode("mode-gate","GATE…");
 }
@@ -133,7 +139,8 @@ function closeGate(keepIsland=false){
   stopArrowBlink();
 
   gateNotice.style.display = "none";
-  
+  gateNotice.setAttribute("aria-hidden","true");
+
   if (!keepIsland) setIslandMode(null, "REC");
 }
 
@@ -181,35 +188,29 @@ function markUsed(){
   // ✅ ticket 전체에 used 상태 부여
   ticket.classList.add("used");
 
-  // ✅ 버튼 클래스 정리: idle/selected 제거 (이게 회색 안 뜨는 원인)
+  // ✅ 버튼 상태 정리
   ticketBtn.classList.remove("selected", "idle");
-  // 필요하면 used용 클래스 추가(선택)
   ticketBtn.classList.add("used");
+  ticketBtn.disabled = true;
 
   // ✅ 헤더는 핑크 유지
   ticketHeader.style.background = "var(--pink)";
   ticketHeader.style.color = "#fff";
   ticketHeader.style.borderBottom = "none";
 
-  // ✅ 아이콘도 사용됨으로 변경 (원본 느낌)
+  // ✅ 아이콘 변경
   ticketIcon.classList.remove("ok");
   ticketIcon.classList.add("used");
-  ticketIcon.textContent = "🎟"; // 원하면 "✓"로 해도 됨
+  ticketIcon.textContent = "🎟";
 
-  // ✅ 사용일시 채우기
+  // ✅ 사용일시
   const d = new Date();
-  const usedLine =
-    `使用日時: ${d.getFullYear()}/${pad(d.getMonth()+1)}/${pad(d.getDate())}(${dayJP(d)}) ` +
-    `${pad(d.getHours())}:${pad(d.getMinutes())}`;
-  usedAt.textContent = usedLine;
-
-  // ✅ 사용일시 보이게(혹시 CSS가 안 먹을 때 대비)
+  usedAt.textContent =
+    `使用日時: ${d.getFullYear()}/${pad(d.getMonth()+1)}/${pad(d.getDate())}(${dayJP(d)}) ${pad(d.getHours())}:${pad(d.getMinutes())}`;
   usedAt.style.display = "block";
 
-  // Dynamic Island DONE
   setIslandMode("mode-done","DONE");
 }
-
 
 gateFront.addEventListener("pointerup", () => {
   if (!dragging) return;
@@ -230,6 +231,3 @@ gateFront.addEventListener("pointercancel", () => {
   dragging = false;
   snapBack();
 });
-const gateNotice = document.getElementById("gateNotice");
-
-
