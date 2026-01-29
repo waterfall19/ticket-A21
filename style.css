@@ -1,7 +1,5 @@
 :root{
-  /* ===== 핫스팟 위치(퍼센트) =====
-     화면 이미지 위에서 클릭/터치가 먹는 영역.
-     필요하면 숫자만 조금씩 조절해. */
+  /* ===== 핫스팟 위치(퍼센트) ===== */
   --ticket-left: 6%;
   --ticket-top: 44%;
   --ticket-w: 88%;
@@ -23,9 +21,10 @@
 }
 
 *{ box-sizing: border-box; }
+
 html, body{
   margin:0;
-  background:#000;
+  background:#f2f2f2;
   height:100%;
   font-family: -apple-system, system-ui, "Hiragino Sans", "Noto Sans JP", sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -34,19 +33,28 @@ html, body{
 .app{
   width: min(430px, 100vw);
   margin: 0 auto;
-  background:#000;
   min-height: 100vh;
+  background:#f2f2f2;
 }
 
+/* ✅ 화면 컨테이너: 이미지 비율 고정(941x2048) */
 .screenWrap{
   position: relative;
   width: 100%;
+  margin: 0 auto;
   background:#000;
+
+  aspect-ratio: 941 / 2048;   /* ⭐ 핵심 */
+  overflow: hidden;
 }
 
+/* ✅ 화면 이미지를 컨테이너에 꽉 채움 */
 .screenImg{
-  width: 100%;
-  height: auto;
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit: cover;
   display:block;
   user-select:none;
   pointer-events:none;
@@ -62,30 +70,21 @@ html, body{
   text-shadow: 0 2px 0 rgba(0,0,0,.15);
 }
 
-.timeText{
-  left: var(--time-left);
-  top: var(--time-top);
-  font-size: var(--time-size);
-  letter-spacing: .3px;
-}
+/* ✅ 지금은 이미지 텍스트랑 겹쳐서 OFF */
+.timeText{ display:none; }
+.labelText{ display:none; }
 
-.labelText{
-  left: var(--label-left);
-  top: var(--label-top);
-  font-size: var(--label-size);
-  text-align:right;
-  width: 34%;
-  opacity: .0; /* 기본 숨김(원하면 1로) */
-}
-
-/* 핫스팟 */
+/* 핫스팟 공통 */
 .hotspot{
   position:absolute;
-  z-index: 30;
   background: transparent;
   border:0;
   padding:0;
 }
+
+/* ✅ 터치 우선순위: 티켓이 top보다 위 */
+.ticketHotspot{ z-index: 50; }
+.topHotspot{ z-index: 40; }
 
 /* 티켓 영역 */
 .ticketHotspot{
@@ -113,7 +112,7 @@ html, body{
 }
 .gateWrap.open{ display:block; }
 
-/* 진행도 tint 레이어(색 변화) */
+/* 진행도 tint */
 .gateTint{
   position:absolute;
   inset:0;
@@ -124,7 +123,7 @@ html, body{
   transition: background-color 60ms linear;
 }
 
-/* gateFront는 translateX로 움직임 */
+/* gateFront: 드래그 대상 */
 .gateFront{
   position:absolute;
   inset:0;
@@ -141,7 +140,7 @@ html, body{
   user-select:none;
 }
 
-/* 화살표 레이어(고정) */
+/* 화살표 */
 .arrowLayer{
   position:absolute;
   inset:0;
@@ -180,7 +179,6 @@ html, body{
   display:none;
   pointer-events:none;
   opacity: 0;
-  transform: translateY(0);
 }
 .usedToastImg{
   width:100%;
