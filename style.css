@@ -550,3 +550,18 @@ html, body {
   line-height: 1.25;
   letter-spacing: -0.2px;
 }
+
+.gateText{
+  font-size: 64px;                 /* 기존 56 → 64 추천 */
+  font-weight: 1000;
+  letter-spacing: 1.2px;
+  color: var(--gateCyan);
+  text-shadow: 0 3px 0 rgba(0,0,0,.16);
+}
+.gateIcons{
+  gap: 18px; /* 기존 34였다면 18~22 정도로 */
+}
+.tri{
+  font-size: 46px;   /* 필요하면 */
+}
+
