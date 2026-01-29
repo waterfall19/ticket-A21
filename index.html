@@ -1,56 +1,39 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Ticket</title>
-  <link rel="stylesheet" href="./style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ticket Gate</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
-  <div class="app">
-    <div class="screenWrap" id="screenWrap">
-      <!-- 배경 화면(white/pink/used) -->
-      <img id="screenImg" class="screenImg" src="./assets/screen_idle.png" alt="screen" />
 
-      <!-- ✅ 동그라미 3곳 텍스트 -->
-      <!-- 1) 맨 위 동그라미: HH:MM:SS.ms 만 -->
-      <div class="overlay timeText" id="timeText"></div>
-      <!-- 2) 티켓 동그라미: F -->
-      <div class="overlay blockText" id="blockText">F</div>
-      <!-- 3) 티켓 동그라미: 60 -->
-      <div class="overlay numText" id="numText">60</div>
+  <!-- 상단 영역 -->
+  <div class="topBar">
+    <div class="topLeft">0/1 枚 選択中</div>
+    <div class="topRight">✕</div>
+  </div>
 
-      <!-- 터치 영역 -->
-      <button class="hotspot ticketHotspot" id="ticketHotspot" type="button" aria-label="ticket"></button>
-      <button class="hotspot topHotspot" id="topHotspot" type="button" aria-label="open gate"></button>
+  <!-- 시간 표시 (분초밀리초만) -->
+  <div class="timeBar">
+    <span id="liveTime"></span>
+  </div>
 
-      <!-- 게이트 오버레이 -->
-      <div class="gateWrap" id="gateWrap" aria-hidden="true">
-        <!-- 노란 안내(고정) -->
-        <div class="noticeLayer" aria-hidden="true">
-          <img class="noticeImg" src="./assets/notice.png" alt="notice" />
-        </div>
+  <!-- GATE 영역 -->
+  <div class="gateWrap" id="gateWrap" aria-hidden="true">
+    <div class="gateBox" id="gateBox">
+      <div class="gateTint" id="gateTint"></div>
 
-        <!-- ✅ 게이트가 떠야 하는 “정확한 박스” -->
-        <div class="gateBox" id="gateBox" aria-hidden="true">
-          <div class="gateTint" id="gateTint"></div>
-
-          <!-- ✅ 게이트 + 화살표 같이 밀림 -->
-          <div class="gateMover" id="gateMover">
-            <img class="gateCardImg" src="./assets/gate_card.png" alt="gate" />
-            <img class="arrowImg" id="arrowImg" src="./assets/arrows.png" alt="arrows" />
-          </div>
-        </div>
-      </div>
-
-      <!-- 사용완료 토스트(게이트 자리에서 잠깐 뜨고 fade-out) -->
-      <div class="usedToast" id="usedToast" aria-hidden="true">
-        <img class="usedToastImg" src="./assets/used_toast.png" alt="used toast" />
+      <div class="gateMover" id="gateMover">
+        <img class="gateCardImg" src="./assets/gate_card.png" alt="gate" />
+        <img class="arrowImg" src="./assets/arrows.png" alt="arrows" />
       </div>
     </div>
   </div>
 
-  <script src="./app.js"></script>
+  <!-- 사용 완료 토스트 -->
+  <div class="usedToast" id="usedToast">1枚使用しました</div>
+
+  <script src="script.js"></script>
 </body>
 </html>
