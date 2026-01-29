@@ -1,3 +1,4 @@
+/* style.css */
 :root{
   --bg:#f2f2f2;
   --card:#ffffff;
@@ -62,7 +63,7 @@ body{
   width: 8px;
   height: 8px;
   border-radius: 999px;
-  background:#ff3b30; /* iOS red */
+  background:#ff3b30;
   opacity: .95;
 }
 .island-text{
@@ -72,10 +73,7 @@ body{
   letter-spacing: .3px;
   opacity: .85;
 }
-/* 상태 변화(연출) */
-.island.mode-gate{
-  width: 220px;
-}
+.island.mode-gate{ width: 220px; }
 .island.mode-done{
   width: 200px;
   transform: translateY(1px);
@@ -84,8 +82,8 @@ body{
 /* 상단 */
 .top{
   position: sticky;
-  top: 44px; /* statusbar 아래에 붙게 */
-  z-index: 10;
+  top: 44px;        /* statusbar 아래에 붙게 */
+  z-index: 20;      /* ✅ gateNotice보다 낮고, content보단 위 */
   background:#fff;
   border-bottom: 1px solid var(--border);
 }
@@ -180,7 +178,7 @@ body{
   position:absolute;
   inset:0;
   display:none;
-  z-index: 20;
+  z-index: 30;          /* ✅ eventCard 위 */
   border-radius: 16px;
   overflow:hidden;
   touch-action: none;
@@ -207,41 +205,63 @@ body{
 .gateIcons{
   display:flex;
   align-items:center;
-  gap: 34px;
+  gap: 18px;
   font-weight: 1000;
 }
 .tri{
-  font-size: 44px;
+  font-size: 46px;
   line-height: 1;
   color: var(--gateYellow);
   text-shadow: 0 2px 0 rgba(0,0,0,.18);
   opacity: 1;
 }
 .gateText{
-  font-size: 56px;
-  letter-spacing: 2px;
+  font-size: 64px;
+  font-weight: 1000;
+  letter-spacing: 1.2px;
   color: var(--gateCyan);
   text-shadow: 0 3px 0 rgba(0,0,0,.16);
+}
+
+/* ✅ 노란 안내바: 화면 상단 고정 + 초록바 위 */
+.gateNotice{
+  position: fixed;                       /* ✅ 핵심 */
+  top: 44px;                             /* statusbar 바로 아래 */
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(430px, 100%);
+  z-index: 9999;                         /* ✅ timebar보다 위 */
+  background: #e3e32b;
+  border-radius: 2px;
+  padding: 10px 12px;
+  display: none;
+}
+.gateNoticeText{
+  color: #d60000;
+  font-weight: 900;
+  font-size: 18px;
+  line-height: 1.25;
+  letter-spacing: -0.2px;
 }
 
 /* 티켓 */
 .tickets{ margin-top:12px; }
 
 .ticket{
-  border-radius: 16px;
+  border-radius: 18px;
   overflow:hidden;
-  border: 1px solid var(--border);
+  border: 1px solid #e6e6e6;
   background: #fff;
+  box-shadow: none;
 }
 
-/* 원본처럼: 헤더는 핑크(사용 전엔 흰/선택 시 핑크로 바뀜) */
 .ticketHeader{
-  padding: 12px 14px;
+  padding: 14px 16px;
   font-weight: 900;
-  font-size: 20px;
+  font-size: 22px;
   background:#fff;
   color:#111;
-  border-bottom: 1px dashed rgba(0,0,0,.25);
+  border-bottom: 2px dashed rgba(0,0,0,.22);
 }
 
 .ticketBody{
@@ -249,9 +269,9 @@ body{
   border:none;
   text-align:left;
   display:flex;
-  gap: 12px;
+  gap: 14px;
   align-items:center;
-  padding: 14px;
+  padding: 14px 16px;
   position:relative;
   cursor:pointer;
 }
@@ -260,7 +280,7 @@ body{
 .ticketBody.selected{ background: var(--pink); color:#fff; }
 
 .ticketIcon{
-  width:58px; height:58px;
+  width:60px; height:60px;
   border-radius:999px;
   display:flex;
   align-items:center;
@@ -268,31 +288,48 @@ body{
   font-weight:900;
   flex: 0 0 auto;
 }
-
 .ticketIcon.ok{
-  background: rgba(255,255,255,.9);
+  background: rgba(255,255,255,.92);
   color: var(--pink-dark);
   font-size:28px;
 }
 .ticketIcon.used{
-  background: rgba(0,0,0,.15);
+  background: rgba(0,0,0,.12);
   color:#111;
   font-size:26px;
 }
 
 .ticketText{ flex:1; }
-.ticketTitle{ font-size:24px; font-weight:900; }
-.ticketSub{ font-weight:800; margin-top:6px; opacity:.95; }
-.ticketNo{ font-size:26px; font-weight:900; margin-top:6px; }
+.ticketTitle{
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: -0.3px;
+  line-height: 1.05;
+}
+.ticketSub{
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.2px;
+  line-height: 1.15;
+  margin-top: 4px;
+  opacity:.95;
+}
+.ticketNo{
+  font-size: 30px;
+  font-weight: 900;
+  letter-spacing: -0.4px;
+  margin-top: 8px;
+  line-height: 1.0;
+}
 
-/* ✅ Used 스타일: 원본처럼 회색 */
+/* ✅ Used 스타일 */
 .ticket.used .ticketHeader{
   background: var(--pink);
   color:#fff;
   border-bottom: none;
 }
 .ticket.used .ticketBody{
-  background: var(--gray);
+  background: var(--gray) !important;
   color:#111;
   cursor:default;
 }
@@ -304,264 +341,36 @@ body{
 /* 도장 */
 .stamp{
   position:absolute;
-  right: 16px;
-  top: 14px;
+  right: 14px;
+  top: 18px;
   transform: rotate(-14deg);
-  border: 4px solid var(--stamp);
+  border: 5px solid var(--stamp);
   color: var(--stamp);
   font-weight: 1000;
-  font-size: 22px;
-  padding: 6px 12px;
+  font-size: 26px;
+  padding: 6px 14px;
   border-radius: 10px;
-  background: rgba(255,255,255,.7);
+  background: rgba(255,255,255,.75);
+  letter-spacing: 0.6px;
   display:none;
 }
 .ticket.used .stamp{ display:block; }
 
-/* 사용일시 (원본처럼 회색 블럭 안에서 dashed로 분리) */
+/* 사용일시 */
 .usedAt{
   background: var(--gray);
-  padding: 10px 14px 14px;
+  padding: 10px 16px 14px;
   font-weight: 800;
   color:#333;
   border-top: 2px dashed rgba(0,0,0,.22);
   display:none;
+  font-size: 18px;
+  letter-spacing: -0.1px;
 }
 .ticket.used .usedAt{ display:block; }
 
-/* 아이폰 전용 */
-/* ====== iOS 티켓앱 느낌(폰트/자간/행간/여백) 오버라이드 ====== */
-
-/* 폰트 렌더링(특히 iOS에서 체감 큼) */
+/* 폰트 렌더링 */
 html, body {
   -webkit-font-smoothing: antialiased;
   text-rendering: geometricPrecision;
 }
-
-/* 카드/공통 라운드 & 테두리(원본은 둥글고 테두리 연함, 그림자 거의 없음) */
-.eventCard, .ticket {
-  border-radius: 18px !important;
-  border: 1px solid #e6e6e6 !important;
-  box-shadow: none !important;
-}
-
-/* 상단 bar(원본은 높이/자간 타이트) */
-.top-row {
-  padding: 14px 14px !important;
-  font-weight: 800 !important;
-  letter-spacing: 0.1px !important;
-}
-
-.timebar {
-  padding: 10px 12px !important;
-  font-weight: 900 !important;
-  letter-spacing: 0.2px !important;
-}
-
-/* 이벤트 카드 내부 여백(원본처럼 촘촘) */
-.eventTop {
-  padding: 16px 14px 6px !important;
-}
-
-.dateMain {
-  font-size: 46px !important;        /* 원본은 숫자 존재감 큼 */
-  font-weight: 900 !important;
-  letter-spacing: -0.5px !important; /* 숫자 폭 살짝 조임 */
-  line-height: 0.98 !important;
-}
-
-.dateSub {
-  font-weight: 900 !important;
-  letter-spacing: -0.2px !important;
-}
-
-.timeInfo {
-  font-weight: 800 !important;
-  letter-spacing: -0.1px !important;
-  line-height: 1.35 !important;      /* 원본처럼 타이트 */
-  padding-top: 4px !important;
-}
-
-/* 별(원본은 날짜 아래쪽에 붙어 보임 + 원 더 작고, 별은 꽉) */
-.starsRow{
-  padding: 0 118px !important; /* 좌우 위치(원본 느낌) */
-  margin: 4px 0 2px !important;
-}
-
-.starAbs{
-  width: 32px !important;
-  height: 32px !important;
-  background: #8fe27c !important;
-  box-shadow: none !important;
-}
-
-.starSvg{
-  width: 92% !important;
-  height: 92% !important;
-  transform: translateY(0.6px) !important;
-}
-
-/* 장소/아티스트(원본은 아래로 확 붙음) */
-.eventMeta{
-  padding: 4px 14px 12px !important;
-}
-
-.venue{
-  font-size: 18px !important;
-  font-weight: 900 !important;
-  letter-spacing: -0.2px !important;
-  margin: 0 0 4px !important;
-}
-
-.artist{
-  font-size: 16px !important;
-  font-weight: 600 !important;
-  letter-spacing: -0.1px !important;
-  color: #666 !important;
-  margin: 0 !important;
-}
-
-/* ====== 티켓(원본 스타일) ====== */
-
-/* 헤더(핑크 바): 원본은 높이/자간 타이트 + 글자 큼 */
-.ticketHeader{
-  background: var(--pink) !important;
-  color: #fff !important;
-  padding: 14px 16px !important;
-  font-size: 22px !important;
-  font-weight: 900 !important;
-  letter-spacing: 0.2px !important;
-}
-
-/* 선택 전(흰색 티켓)은 원본처럼 헤더 아래 점선 얇게 */
-.ticket:not(.used) .ticketHeader{
-  background: #fff !important;
-  color: #111 !important;
-  border-bottom: 2px dashed rgba(0,0,0,.22) !important;
-}
-
-/* 바디 기본 여백 */
-.ticketBody{
-  padding: 14px 16px !important;
-  gap: 14px !important;
-}
-
-/* 아이콘(왼쪽 원형) */
-.ticketIcon{
-  width: 60px !important;
-  height: 60px !important;
-}
-
-/* 타이틀/서브/번호 자간/행간(원본에서 차이가 크게 보이는 구간) */
-.ticketTitle{
-  font-size: 26px !important;
-  font-weight: 900 !important;
-  letter-spacing: -0.3px !important;
-  line-height: 1.05 !important;
-}
-
-.ticketSub{
-  font-size: 18px !important;
-  font-weight: 800 !important;
-  letter-spacing: -0.2px !important;
-  line-height: 1.15 !important;
-  margin-top: 4px !important;
-}
-
-.ticketNo{
-  font-size: 30px !important;
-  font-weight: 900 !important;
-  letter-spacing: -0.4px !important;
-  margin-top: 8px !important;
-  line-height: 1.0 !important;
-}
-
-/* 사용됨(회색 영역): 원본은 회색이 카드 안에서 꽉 차게 보임 */
-.ticket.used .ticketBody{
-  background: #dcdcdc !important;
-  color: #111 !important;
-}
-
-.ticket.used .usedAt{
-  background: #dcdcdc !important;
-  border-top: 2px dashed rgba(0,0,0,.22) !important;
-  padding: 10px 16px 14px !important;
-  font-size: 18px !important;
-  font-weight: 800 !important;
-  letter-spacing: -0.1px !important;
-}
-
-/* 도장(使用済): 원본처럼 살짝 큰 편 + 두께감 */
-.stamp{
-  right: 14px !important;
-  top: 18px !important;
-  font-size: 26px !important;
-  padding: 6px 14px !important;
-  border-width: 5px !important;
-  border-radius: 10px !important;
-  transform: rotate(-14deg) !important;
-  letter-spacing: 0.6px !important;
-  background: rgba(255,255,255,.75) !important;
-}
-
-/* 선택 상태(핑크 바디) */
-.ticketBody.selected{
-  background: var(--pink) !important;
-  color: #fff !important;
-}
-
-/* 선택 상태에서 아이콘 대비 */
-.ticketBody.selected .ticketIcon.ok{
-  background: rgba(255,255,255,.92) !important;
-  color: var(--pink-dark) !important;
-}
-
-/* ====== GATE 글자/화살표 (원본 느낌으로 약간 조임) ====== */
-.gateText{
-  letter-spacing: 1.6px !important;
-}
-
-.tri{
-  letter-spacing: 0 !important;
-}
-
-
-@supports (-webkit-touch-callout: none) {
-  /* iOS Safari 전용 보정 */
-}
-
-.ticket.used .ticketBody { background: var(--gray) !important; }
-
-.gateNotice{
-  position: absolute;
-  top: 8px;
-  left: 12px;
-  right: 12px;
-  z-index: 30;
-  background: #e3e32b;
-  border-radius: 2px;
-  padding: 10px 12px;
-}
-
-.gateNoticeText{
-  color: #d60000;
-  font-weight: 900;
-  font-size: 18px;
-  line-height: 1.25;
-  letter-spacing: -0.2px;
-}
-
-.gateText{
-  font-size: 64px;                 /* 기존 56 → 64 추천 */
-  font-weight: 1000;
-  letter-spacing: 1.2px;
-  color: var(--gateCyan);
-  text-shadow: 0 3px 0 rgba(0,0,0,.16);
-}
-.gateIcons{
-  gap: 18px; /* 기존 34였다면 18~22 정도로 */
-}
-.tri{
-  font-size: 46px;   /* 필요하면 */
-}
-
