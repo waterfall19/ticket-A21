@@ -2,128 +2,55 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8" />
-
-  <!-- PWA(홈화면 추가 시 Safari UI 최소화) -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="Ticket">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="theme-color" content="#ffffff">
-
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-
   <title>Ticket</title>
   <link rel="stylesheet" href="./style.css" />
 </head>
 
 <body>
-<div class="app">
+  <div class="app">
+    <!-- 화면(이미지) 컨테이너 -->
+    <div class="screenWrap" id="screenWrap">
+      <img id="screenImg" class="screenImg" src="./assets/screen_idle.png" alt="screen" />
 
-  <!-- Status bar (REC 바 없음) -->
-  <div class="statusbar">
-    <div class="sb-left" id="sbLeft">22:00</div>
-    <div class="sb-right">5G</div>
+      <!-- (4) 글자/시간 오버레이(원하면 값 바꿔 쓰기) -->
+      <div class="overlay timeText" id="timeText"></div>
+      <div class="overlay labelText" id="labelText"></div>
+
+      <!-- (1) 티켓 터치 핫스팟 -->
+      <button class="hotspot ticketHotspot" id="ticketHotspot" type="button" aria-label="ticket"></button>
+
+      <!-- (2) 위 흰색 영역 핫스팟(게이트 띄우는 트리거) -->
+      <button class="hotspot topHotspot" id="topHotspot" type="button" aria-label="open gate"></button>
+
+      <!-- (2) 게이트 오버레이 -->
+      <div class="gateWrap" id="gateWrap" aria-hidden="true">
+        <!-- 진행도에 따른 색 변화 레이어(게이트 이미지 위에 tint로 얹음) -->
+        <div class="gateTint" id="gateTint"></div>
+
+        <!-- (3) 미는 레이어: gate_card.png (translateX로 이동) -->
+        <div class="gateFront" id="gateFront">
+          <img class="gateCardImg" src="./assets/gate_card.png" alt="gate" />
+        </div>
+
+        <!-- (2) 화살표 이미지(고정 + opacity 깜빡) -->
+        <div class="arrowLayer" id="arrowLayer" aria-hidden="true">
+          <img class="arrowImg" src="./assets/arrows.png" alt="arrows" />
+        </div>
+
+        <!-- (2) 노란 안내 이미지 -->
+        <div class="noticeLayer" id="noticeLayer" aria-hidden="true">
+          <img class="noticeImg" src="./assets/notice.png" alt="notice" />
+        </div>
+      </div>
+
+      <!-- (3) 사용완료 토스트(잠깐 뜨고 페이드아웃) -->
+      <div class="usedToast" id="usedToast" aria-hidden="true">
+        <img class="usedToastImg" src="./assets/used_toast.png" alt="used toast" />
+      </div>
+    </div>
   </div>
 
-  <!-- Header -->
-  <header class="top">
-    <div class="top-row">
-      <div class="top-left"><span class="accent" id="selText">0/1</span> 枚 選択中</div>
-      <button class="top-close" id="closeBtn" type="button">✕</button>
-    </div>
-    <div class="timebar" id="timebar"></div>
-  </header>
-
-  <main class="content">
-
-    <!-- 이벤트 카드 (게이트는 이 카드 영역을 터치해야 열림) -->
-    <section class="eventCard" id="eventCard">
-      <div class="eventTop">
-        <div class="dateBlock">
-          <div class="dateMain">1/29</div>
-          <div class="dateSub">(木)</div>
-        </div>
-        <div class="timeInfo">
-          <div><b>17:30</b> 開場</div>
-          <div><b>18:30</b> 開演</div>
-        </div>
-      </div>
-
-      <div class="starsRow">
-        <div class="starAbs">
-          <svg class="starSvg" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 2.2l2.93 6.2 6.77.58-5.12 4.33 1.56 6.55L12 16.9 5.86 19.86l1.56-6.55L2.3 8.98l6.77-.58z"/>
-          </svg>
-        </div>
-        <div class="starAbs">
-          <svg class="starSvg" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 2.2l2.93 6.2 6.77.58-5.12 4.33 1.56 6.55L12 16.9 5.86 19.86l1.56-6.55L2.3 8.98l6.77-.58z"/>
-          </svg>
-        </div>
-      </div>
-
-      <div class="eventMeta">
-        <div class="venue">立川ステージガーデン</div>
-        <div class="artist">izna</div>
-      </div>
-
-      <!-- GATE 커버 -->
-      <div class="gateWrap" id="gateWrap" aria-hidden="true">
-        <div class="gateBehind" id="gateBehind"></div>
-
-        <!-- 노란 안내 -->
-        <div class="gateNotice" id="gateNotice">
-          <div class="gateNoticeText">
-            スライドすると使用済になります。<br/>
-            使用済チケットは、入場・再発行不可
-          </div>
-        </div>
-
-        <div class="gateFront" id="gateFront">
-          <div class="gateIcons">
-            <div class="chevGroup left" id="triLeft" aria-hidden="true">
-              <span class="chev"></span><span class="chev"></span>
-            </div>
-
-            <div class="gateText">GATE</div>
-
-            <div class="chevGroup right" id="triRight" aria-hidden="true">
-              <span class="chev"></span><span class="chev"></span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 티켓 1장 -->
-    <section class="tickets">
-      <article class="ticket" id="ticket" data-id="60">
-        <div class="ticketHeader" id="ticketHeader">山本 珠璃 様</div>
-
-        <button class="ticketBody idle tappable" id="ticketBtn" type="button">
-          <div class="ticketIcon ok" id="ticketIcon" aria-hidden="true">
-            <svg class="checkSvg" viewBox="0 0 24 24">
-              <path d="M20 6L9 17l-5-5" fill="none" stroke="currentColor"
-                    stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-
-          <div class="ticketText">
-            <div class="ticketTitle">スタンディング</div>
-            <div class="ticketSub">Fブロック 整理番号</div>
-            <div class="ticketNo">60 番</div>
-          </div>
-
-          <div class="stamp" id="stamp">使用済</div>
-        </button>
-
-        <div class="usedAt" id="usedAt"></div>
-      </article>
-    </section>
-
-  </main>
-</div>
-
-<script src="./app.js"></script>
+  <script src="./app.js"></script>
 </body>
 </html>
-
