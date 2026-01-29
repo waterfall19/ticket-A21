@@ -1,242 +1,107 @@
-:root{
-  /* screen_* 비율 고정(941x2048) */
-  --screen-w: 941;
-  --screen-h: 2048;
-
-  /* ✅ 티켓 핫스팟(핑크 티켓 영역 기준) */
-  --ticket-left: 0%;
-  --ticket-top: 34.03%;
-  --ticket-w: 100%;
-  --ticket-h: 15.77%;
-
-  /* ✅ 상단 핫스팟(티켓 위) */
-  --top-left: 0%;
-  --top-top: 0%;
-  --top-w: 100%;
-  --top-h: 34.03%;
-
-  /* ✅ 게이트 박스 위치 (청록바 끝~핑크 시작 사이로 맞춤) */
-  --gate-left: 0%;
-  --gate-top: 14.84%;
-  --gate-w: 100%;
-  --gate-h: 19.19%;
-
-  /* ===== 텍스트 위치 ===== */
-  /* 1) 시간: (날짜/요일 삭제, HH:MM:SS.ms만) + 청록바 중앙에 오도록 위로 살짝 올림 */
-  --time-right: 6%;
-  --time-top: 11.4%;
-  --time-size: clamp(16px, 2.2vw, 22px);
-
-  /* 2) F / 3) 60 : 핑크 안쪽에 딱 들어가게 */
-  --block-left: 46%;
-  --block-top: 48.8%;
-  --block-size: clamp(22px, 3vw, 34px);
-
-  --num-left: 58%;
-  --num-top: 48.4%;
-  --num-size: clamp(34px, 4.5vw, 54px);
-
-  /* ✅ gateTint opacity = 1 (100%) */
-  --gate-tint-opacity: 1;
+* {
+  box-sizing: border-box;
+  user-select: none;
 }
 
-*{ box-sizing:border-box; }
-
-html, body{
-  margin:0;
-  height:100%;
-  background:#f2f2f2;
-  font-family: -apple-system, system-ui, "Hiragino Sans", "Noto Sans JP", sans-serif;
-  -webkit-font-smoothing: antialiased;
+body {
+  margin: 0;
+  background: #f2f2f2;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont;
 }
 
-.app{
-  width: min(430px, 100vw);
-  margin: 0 auto;
-  min-height: 100vh;
-  background:#f2f2f2;
+/* 상단 바 */
+.topBar {
+  height: 44px;
+  background: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 14px;
+  font-size: 14px;
 }
 
-/* 화면 컨테이너(비율 고정) */
-.screenWrap{
+.topLeft {
+  color: #000;
+}
+
+.topRight {
+  font-size: 20px;
+}
+
+/* 시간 바 */
+.timeBar {
+  height: 40px;
+  background: #4aa6b0;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* GATE 래퍼 */
+.gateWrap {
   position: relative;
   width: 100%;
-  aspect-ratio: 941 / 2048;
-  background:#000;
-  overflow:hidden;
+  height: 120px;
+  margin-top: 8px;
+  overflow: hidden;
 }
 
-.screenImg{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  object-fit: cover;
-  display:block;
-  pointer-events:none;
-  user-select:none;
+/* GATE 박스 */
+.gateBox {
+  position: absolute;
+  inset: 0;
 }
 
-/* 텍스트 오버레이 */
-.overlay{
-  position:absolute;
-  z-index: 30;
-  pointer-events:none;
-  color:#fff;
-  font-weight: 900;
-  text-shadow: 0 2px 0 rgba(0,0,0,.22);
-}
-
-.timeText{
-  top: var(--time-top);
-  right: var(--time-right);
-  font-size: var(--time-size);
-  letter-spacing: .3px;
-}
-
-.blockText{
-  left: var(--block-left);
-  top: var(--block-top);
-  font-size: var(--block-size);
-}
-
-.numText{
-  left: var(--num-left);
-  top: var(--num-top);
-  font-size: var(--num-size);
-  letter-spacing: .4px;
-}
-
-/* 핫스팟 */
-.hotspot{
-  position:absolute;
-  background: transparent;
-  border:0;
-  padding:0;
-}
-
-/* 티켓 우선 터치 */
-.ticketHotspot{ z-index: 55; }
-.topHotspot{ z-index: 45; }
-
-.ticketHotspot{
-  left: var(--ticket-left);
-  top: var(--ticket-top);
-  width: var(--ticket-w);
-  height: var(--ticket-h);
-}
-
-.topHotspot{
-  left: var(--top-left);
-  top: var(--top-top);
-  width: var(--top-w);
-  height: var(--top-h);
-}
-
-/* 게이트 오버레이 */
-.gateWrap{
-  position:absolute;
-  inset:0;
-  display:none;
-  z-index: 80;
-}
-.gateWrap.open{ display:block; }
-
-/* 노란 안내(고정) */
-.noticeLayer{
-  position:absolute;
-  inset:0;
-  z-index: 95;
-  pointer-events:none;
-}
-.noticeImg{
-  width:100%;
-  height:100%;
-  object-fit: cover;
-  display:block;
-  pointer-events:none;
-  user-select:none;
-}
-
-/* ✅ 게이트 박스: “똑바로” 보이게 화면에서 딱 그 자리만 */
-.gateBox{
-  position:absolute;
-  left: var(--gate-left);
-  top: var(--gate-top);
-  width: var(--gate-w);
-  height: var(--gate-h);
-  z-index: 90;
-  overflow:hidden;
-  pointer-events:none;
-}
-
-/* gateTint: 게이트와 동일 크기 + opacity 1 */
-.gateTint{
-  position:absolute;
-  inset:0;
-  opacity: var(--gate-tint-opacity);
-  background: transparent;
-  z-index: 91;
-  pointer-events:none;
-  transition: background-color 60ms linear;
-}
-
-/* ✅ gateMover: 이걸 밀면 gate+arrow 같이 이동 */
-.gateMover{
-  position:absolute;
-  inset:0;
-  z-index: 92;
-  will-change: transform;
-  touch-action:none;
-  pointer-events:auto;
-}
-
-/* ✅ 게이트가 “똑바로/안 찌그러지게” 보이게:
-   - gate_card.png 자체가 카드 영역을 포함하고 있으니 cover로 박스 꽉 채움 */
-.gateCardImg,
-.arrowImg{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  object-fit: cover;
-  display:block;
-  pointer-events:none;
-  user-select:none;
-}
-
-/* 사용완료 토스트: 게이트 자리에서 뜸 */
-.usedToast{
-  position:absolute;
-  left: var(--gate-left);
-  top: var(--gate-top);
-  width: var(--gate-w);
-  height: var(--gate-h);
-  z-index: 100;
-  display:none;
-  pointer-events:none;
+/* GATE 뒤 레이어 */
+.gateTint {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
   opacity: 0;
-  overflow:hidden;
-}
-.usedToastImg{
-  width:100%;
-  height:100%;
-  object-fit: cover;
-  display:block;
-  pointer-events:none;
-  user-select:none;
-}
-.usedToast.show{
-  display:block;
-  opacity: 1;
-  transition: opacity 120ms ease;
-}
-.usedToast.fade{
-  opacity: 0;
-  transition: opacity 240ms ease;
+  transition: opacity 0.15s linear;
+  z-index: 1;
 }
 
-/* 디버그 필요하면 body에 debug 클래스 */
-body.debug .ticketHotspot{ outline: 2px solid red; }
-body.debug .topHotspot{ outline: 2px solid blue; }
-body.debug .gateBox{ outline: 2px solid lime; }
+/* GATE + 화살표 이동 컨테이너 */
+.gateMover {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateX(0);
+}
+
+/* GATE 이미지 */
+.gateCardImg {
+  height: 100%;
+  pointer-events: none;
+}
+
+/* 화살표 */
+.arrowImg {
+  position: absolute;
+  width: 120px;
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+/* 사용 완료 토스트 */
+.usedToast {
+  position: fixed;
+  bottom: 120px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #d24770;
+  color: #fff;
+  padding: 18px 36px;
+  border-radius: 12px;
+  font-size: 18px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
