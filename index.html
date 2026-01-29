@@ -1,29 +1,30 @@
-<!-- index.html -->
 <!doctype html>
-<html lang="ko">
+<html lang="ja">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Ticket UI - Gate + Dynamic Island</title>
+
+  <!-- PWA(홈화면 추가 시 Safari UI 최소화) -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Ticket">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#ffffff">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+  <title>Ticket</title>
   <link rel="stylesheet" href="./style.css" />
 </head>
+
 <body>
 <div class="app">
 
-  <!-- ✅ iOS Dynamic Island 느낌 Status 영역 -->
+  <!-- Status bar (REC 바 없음) -->
   <div class="statusbar">
     <div class="sb-left" id="sbLeft">22:00</div>
-
-    <!-- ✅ 추가: island DOM -->
-    <div class="island" id="island" aria-hidden="true">
-      <span class="island-dot" id="islandDot"></span>
-      <span class="island-text" id="islandText">REC</span>
-    </div>
-
     <div class="sb-right">5G</div>
   </div>
 
-  <!-- 상단 -->
+  <!-- Header -->
   <header class="top">
     <div class="top-row">
       <div class="top-left"><span class="accent" id="selText">0/1</span> 枚 選択中</div>
@@ -34,7 +35,7 @@
 
   <main class="content">
 
-    <!-- 이벤트 카드 -->
+    <!-- 이벤트 카드 (게이트는 이 카드 영역을 터치해야 열림) -->
     <section class="eventCard" id="eventCard">
       <div class="eventTop">
         <div class="dateBlock">
@@ -47,7 +48,6 @@
         </div>
       </div>
 
-      <!-- 별 -->
       <div class="starsRow">
         <div class="starAbs">
           <svg class="starSvg" viewBox="0 0 24 24" aria-hidden="true">
@@ -66,12 +66,12 @@
         <div class="artist">izna</div>
       </div>
 
-      <!-- ✅ GATE 커버 (슬라이드로 사용 확정) -->
+      <!-- GATE 커버 -->
       <div class="gateWrap" id="gateWrap" aria-hidden="true">
         <div class="gateBehind" id="gateBehind"></div>
 
-        <!-- ✅ 노란 안내 바(카드 내부 X, 화면 상단 fixed로 띄울거라 여기 있어도 됨) -->
-        <div class="gateNotice" id="gateNotice" aria-hidden="true">
+        <!-- 노란 안내 -->
+        <div class="gateNotice" id="gateNotice">
           <div class="gateNoticeText">
             スライドすると使用済になります。<br/>
             使用済チケットは、入場・再発行不可
@@ -80,19 +80,16 @@
 
         <div class="gateFront" id="gateFront">
           <div class="gateIcons">
-              <div class="chevGroup left" id="triLeft">
-                <span class="chev"></span>
-                <span class="chev"></span>
-              </div>
-            
-              <div class="gateText">GATE</div>
-            
-              <div class="chevGroup right" id="triRight">
-                <span class="chev"></span>
-                <span class="chev"></span>
-              </div>
+            <div class="chevGroup left" id="triLeft" aria-hidden="true">
+              <span class="chev"></span><span class="chev"></span>
             </div>
 
+            <div class="gateText">GATE</div>
+
+            <div class="chevGroup right" id="triRight" aria-hidden="true">
+              <span class="chev"></span><span class="chev"></span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -102,14 +99,20 @@
       <article class="ticket" id="ticket" data-id="60">
         <div class="ticketHeader" id="ticketHeader">山本 珠璃 様</div>
 
-        <!-- 초기: 흰색 바디 (클릭하면 핑크 선택) -->
         <button class="ticketBody idle tappable" id="ticketBtn" type="button">
-          <div class="ticketIcon ok" id="ticketIcon">✓</div>
+          <div class="ticketIcon ok" id="ticketIcon" aria-hidden="true">
+            <svg class="checkSvg" viewBox="0 0 24 24">
+              <path d="M20 6L9 17l-5-5" fill="none" stroke="currentColor"
+                    stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+
           <div class="ticketText">
             <div class="ticketTitle">スタンディング</div>
-            <div class="ticketSub">Aブロック 整理番号</div>
-            <div class="ticketNo">21 番</div>
+            <div class="ticketSub">Fブロック 整理番号</div>
+            <div class="ticketNo">60 番</div>
           </div>
+
           <div class="stamp" id="stamp">使用済</div>
         </button>
 
