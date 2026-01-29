@@ -202,26 +202,49 @@ body{
   will-change: transform;
 }
 
+/* ===== GATE (사진 기준: 더 얇고 작게) ===== */
+
 .gateIcons{
   display:flex;
   align-items:center;
-  gap: 18px;
-  font-weight: 1000;
+  justify-content:center;
+  gap: 22px;              /* 전체 폭 줄임 */
+  transform: translateY(-1px);
 }
-.tri{
-  font-size: 46px;
-  line-height: 1;
-  color: var(--gateYellow);
-  text-shadow: 0 2px 0 rgba(0,0,0,.18);
-  opacity: 1;
+
+/* 화살표 */
+.chevGroup{
+  display:flex;
+  gap: 6px;
+  align-items:center;
 }
+
+.chev{
+  width:0;
+  height:0;
+  border-top:13px solid transparent;
+  border-bottom:13px solid transparent;
+  filter: drop-shadow(0 1.5px 0 rgba(0,0,0,.18));
+}
+
+.chevGroup.left .chev{
+  border-right:20px solid #ffd400;
+}
+
+.chevGroup.right .chev{
+  border-left:20px solid #ffd400;
+}
+
+/* GATE 글자 – 얇고 작게 */
 .gateText{
-  font-size: 64px;
-  font-weight: 1000;
-  letter-spacing: 1.2px;
-  color: var(--gateCyan);
-  text-shadow: 0 3px 0 rgba(0,0,0,.16);
+  font-size:44px;         /* ↓ 크기 */
+  font-weight:600;        /* ↓ 두께 */
+  letter-spacing:1px;     /* ↓ 자간 */
+  color:#32c5ff;
+  text-shadow:0 2px 0 rgba(0,0,0,.14);
+  line-height:1;
 }
+
 
 /* ✅ 노란 안내바: 화면 상단 고정 + 초록바 위 */
 .gateNotice{
@@ -374,3 +397,4 @@ html, body {
   -webkit-font-smoothing: antialiased;
   text-rendering: geometricPrecision;
 }
+
