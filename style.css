@@ -42,12 +42,13 @@ body {
 
 /* GATE 래퍼 */
 .gateWrap {
-  position: relative;
-  width: 100%;
-  height: 120px;
-  margin-top: 8px;
-  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;   /* 또는 */
+  min-height: 180px;
 }
+
 
 /* GATE 박스 */
 .gateBox {
@@ -105,3 +106,4 @@ body {
   pointer-events: none;
   transition: opacity 0.4s ease;
 }
+
