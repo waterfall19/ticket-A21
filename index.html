@@ -9,11 +9,10 @@
 
 <body>
   <div class="app">
-    <!-- 화면(이미지) 컨테이너 -->
     <div class="screenWrap" id="screenWrap">
       <img id="screenImg" class="screenImg" src="./assets/screen_idle.png" alt="screen" />
 
-      <!-- (4) 글자/시간 오버레이(원하면 값 바꿔 쓰기) -->
+      <!-- (4) 글자/시간 오버레이: 지금은 겹쳐서 OFF(필요하면 켜고 위치 맞추면 됨) -->
       <div class="overlay timeText" id="timeText"></div>
       <div class="overlay labelText" id="labelText"></div>
 
@@ -25,10 +24,9 @@
 
       <!-- (2) 게이트 오버레이 -->
       <div class="gateWrap" id="gateWrap" aria-hidden="true">
-        <!-- 진행도에 따른 색 변화 레이어(게이트 이미지 위에 tint로 얹음) -->
         <div class="gateTint" id="gateTint"></div>
 
-        <!-- (3) 미는 레이어: gate_card.png (translateX로 이동) -->
+        <!-- (3) 미는 레이어 -->
         <div class="gateFront" id="gateFront">
           <img class="gateCardImg" src="./assets/gate_card.png" alt="gate" />
         </div>
@@ -44,7 +42,7 @@
         </div>
       </div>
 
-      <!-- (3) 사용완료 토스트(잠깐 뜨고 페이드아웃) -->
+      <!-- (3) 사용완료 토스트 -->
       <div class="usedToast" id="usedToast" aria-hidden="true">
         <img class="usedToastImg" src="./assets/used_toast.png" alt="used toast" />
       </div>
@@ -54,4 +52,3 @@
   <script src="./app.js"></script>
 </body>
 </html>
-
