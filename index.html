@@ -1,3 +1,4 @@
+<!-- index.html -->
 <!doctype html>
 <html lang="ko">
 <head>
@@ -12,13 +13,21 @@
   <!-- ✅ iOS Dynamic Island 느낌 Status 영역 -->
   <div class="statusbar">
     <div class="sb-left" id="sbLeft">22:00</div>
+
+    <!-- ✅ 추가: island DOM -->
+    <div class="island" id="island" aria-hidden="true">
+      <span class="island-dot" id="islandDot"></span>
+      <span class="island-text" id="islandText">REC</span>
+    </div>
+
+    <div class="sb-right">5G</div>
   </div>
 
   <!-- 상단 -->
   <header class="top">
     <div class="top-row">
       <div class="top-left"><span class="accent" id="selText">0/1</span> 枚 選択中</div>
-      <button class="top-close" id="closeBtn">✕</button>
+      <button class="top-close" id="closeBtn" type="button">✕</button>
     </div>
     <div class="timebar" id="timebar"></div>
   </header>
@@ -60,12 +69,15 @@
       <!-- ✅ GATE 커버 (슬라이드로 사용 확정) -->
       <div class="gateWrap" id="gateWrap" aria-hidden="true">
         <div class="gateBehind" id="gateBehind"></div>
-        <div class="gateNotice" id="gateNotice">
-            <div class="gateNoticeText">
-              スライドすると使用済になります。<br/>
-              使用済チケットは、入場・再発行不可
-            </div>
+
+        <!-- ✅ 노란 안내 바(카드 내부 X, 화면 상단 fixed로 띄울거라 여기 있어도 됨) -->
+        <div class="gateNotice" id="gateNotice" aria-hidden="true">
+          <div class="gateNoticeText">
+            スライドすると使用済になります。<br/>
+            使用済チケットは、入場・再発行不可
+          </div>
         </div>
+
         <div class="gateFront" id="gateFront">
           <div class="gateIcons">
             <div class="tri left" id="triLeft">◀◀</div>
