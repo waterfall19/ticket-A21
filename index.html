@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ticket UI - Gate + Dynamic Island</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+<div class="app">
+
+  <!-- ✅ iOS Dynamic Island 느낌 Status 영역 -->
+  <div class="statusbar">
+    <div class="sb-left" id="sbLeft">22:00</div>
+  </div>
+
+  <!-- 상단 -->
+  <header class="top">
+    <div class="top-row">
+      <div class="top-left"><span class="accent" id="selText">0/1</span> 枚 選択中</div>
+      <button class="top-close" id="closeBtn">✕</button>
+    </div>
+    <div class="timebar" id="timebar"></div>
+  </header>
+
+  <main class="content">
+
+    <!-- 이벤트 카드 -->
+    <section class="eventCard" id="eventCard">
+      <div class="eventTop">
+        <div class="dateBlock">
+          <div class="dateMain">1/29</div>
+          <div class="dateSub">(木)</div>
+        </div>
+        <div class="timeInfo">
+          <div><b>17:30</b> 開場</div>
+          <div><b>18:30</b> 開演</div>
+        </div>
+      </div>
+
+      <!-- 별 -->
+      <div class="starsRow">
+        <div class="starAbs">
+          <svg class="starSvg" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 2.2l2.93 6.2 6.77.58-5.12 4.33 1.56 6.55L12 16.9 5.86 19.86l1.56-6.55L2.3 8.98l6.77-.58z"/>
+          </svg>
+        </div>
+        <div class="starAbs">
+          <svg class="starSvg" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 2.2l2.93 6.2 6.77.58-5.12 4.33 1.56 6.55L12 16.9 5.86 19.86l1.56-6.55L2.3 8.98l6.77-.58z"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="eventMeta">
+        <div class="venue">立川ステージガーデン</div>
+        <div class="artist">izna</div>
+      </div>
+
+      <!-- ✅ GATE 커버 (슬라이드로 사용 확정) -->
+      <div class="gateWrap" id="gateWrap" aria-hidden="true">
+        <div class="gateBehind" id="gateBehind"></div>
+
+        <div class="gateFront" id="gateFront">
+          <div class="gateIcons">
+            <div class="tri left" id="triLeft">◀◀</div>
+            <div class="gateText">GATE</div>
+            <div class="tri right" id="triRight">▶▶</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 티켓 1장 -->
+    <section class="tickets">
+      <article class="ticket" id="ticket" data-id="60">
+        <div class="ticketHeader" id="ticketHeader">山本 珠璃 様</div>
+
+        <!-- 초기: 흰색 바디 (클릭하면 핑크 선택) -->
+        <button class="ticketBody idle tappable" id="ticketBtn" type="button">
+          <div class="ticketIcon ok" id="ticketIcon">✓</div>
+          <div class="ticketText">
+            <div class="ticketTitle">スタンディング</div>
+            <div class="ticketSub">Aブロック 整理番号</div>
+            <div class="ticketNo">21 番</div>
+          </div>
+          <div class="stamp" id="stamp">使用済</div>
+        </button>
+
+        <div class="usedAt" id="usedAt"></div>
+      </article>
+    </section>
+
+  </main>
+</div>
+
+<script src="./app.js"></script>
+</body>
+</html>
