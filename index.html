@@ -13,36 +13,38 @@
       <!-- 배경 화면(white/pink/used) -->
       <img id="screenImg" class="screenImg" src="./assets/screen_idle.png" alt="screen" />
 
-      <!-- ✅ 텍스트 오버레이(동그라미 3곳) -->
+      <!-- ✅ 동그라미 3곳 텍스트 -->
+      <!-- 1) 맨 위 동그라미: HH:MM:SS.ms 만 -->
       <div class="overlay timeText" id="timeText"></div>
+      <!-- 2) 티켓 동그라미: F -->
       <div class="overlay blockText" id="blockText">F</div>
+      <!-- 3) 티켓 동그라미: 60 -->
       <div class="overlay numText" id="numText">60</div>
 
-      <!-- ✅ 터치 영역 -->
+      <!-- 터치 영역 -->
       <button class="hotspot ticketHotspot" id="ticketHotspot" type="button" aria-label="ticket"></button>
       <button class="hotspot topHotspot" id="topHotspot" type="button" aria-label="open gate"></button>
 
-      <!-- ✅ 게이트(열렸을 때만) -->
+      <!-- 게이트 오버레이 -->
       <div class="gateWrap" id="gateWrap" aria-hidden="true">
-        <!-- 노란 안내(항상 화면 기준으로 올려둠) -->
-        <div class="noticeLayer" id="noticeLayer" aria-hidden="true">
+        <!-- 노란 안내(고정) -->
+        <div class="noticeLayer" aria-hidden="true">
           <img class="noticeImg" src="./assets/notice.png" alt="notice" />
         </div>
 
-        <!-- ✅ gateBox = “게이트 카드가 실제로 있는 영역” (중요) -->
+        <!-- ✅ 게이트가 떠야 하는 “정확한 박스” -->
         <div class="gateBox" id="gateBox" aria-hidden="true">
-          <!-- gate 뒤 색 레이어(게이트와 동일 크기) -->
           <div class="gateTint" id="gateTint"></div>
 
-          <!-- ✅ gateMover = 드래그로 같이 이동(게이트+화살표 같이) -->
-          <div class="gateMover" id="gateMover" aria-label="gate drag area">
-            <img class="gateCardImg" src="./assets/gate_card.png" alt="gate card" />
+          <!-- ✅ 게이트 + 화살표 같이 밀림 -->
+          <div class="gateMover" id="gateMover">
+            <img class="gateCardImg" src="./assets/gate_card.png" alt="gate" />
             <img class="arrowImg" id="arrowImg" src="./assets/arrows.png" alt="arrows" />
           </div>
         </div>
       </div>
 
-      <!-- ✅ 사용완료 토스트(게이트 자리에서 잠깐 뜨고 페이드) -->
+      <!-- 사용완료 토스트(게이트 자리에서 잠깐 뜨고 fade-out) -->
       <div class="usedToast" id="usedToast" aria-hidden="true">
         <img class="usedToastImg" src="./assets/used_toast.png" alt="used toast" />
       </div>
