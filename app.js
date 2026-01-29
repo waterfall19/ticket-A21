@@ -120,6 +120,9 @@ function openGate(){
   gateWrap.setAttribute("aria-hidden","false");
   gateFront.style.transform = "translateX(0px)";
   gateBehind.style.background = fixedColors[0];
+
+  gateNotice.style.display = "block";
+  
   startArrowBlink();
   setIslandMode("mode-gate","GATE…");
 }
@@ -128,6 +131,9 @@ function closeGate(keepIsland=false){
   gateWrap.classList.remove("open");
   gateWrap.setAttribute("aria-hidden","true");
   stopArrowBlink();
+
+  gateNotice.style.display = "none";
+  
   if (!keepIsland) setIslandMode(null, "REC");
 }
 
@@ -224,4 +230,6 @@ gateFront.addEventListener("pointercancel", () => {
   dragging = false;
   snapBack();
 });
+const gateNotice = document.getElementById("gateNotice");
+
 
