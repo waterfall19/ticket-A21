@@ -10,42 +10,39 @@
 <body>
   <div class="app">
     <div class="screenWrap" id="screenWrap">
+      <!-- 배경 화면(white/pink/used) -->
       <img id="screenImg" class="screenImg" src="./assets/screen_idle.png" alt="screen" />
 
-      <!-- ✅ (텍스트 오버레이) 동그라미 3곳 -->
-      <!-- 1) 맨 위 청록바 오른쪽: 밀리초 포함 현재시간 -->
+      <!-- ✅ 텍스트 오버레이(동그라미 3곳) -->
       <div class="overlay timeText" id="timeText"></div>
+      <div class="overlay blockText" id="blockText">F</div>
+      <div class="overlay numText" id="numText">60</div>
 
-      <!-- 2) 핑크 티켓 안 작은 동그라미: 블록(흰색) -->
-      <div class="overlay blockText" id="blockText"></div>
-
-      <!-- 3) 핑크 티켓 안 긴 동그라미: 번호(흰색) -->
-      <div class="overlay numText" id="numText"></div>
-
-      <!-- ✅ (1) 티켓 터치 -->
+      <!-- ✅ 터치 영역 -->
       <button class="hotspot ticketHotspot" id="ticketHotspot" type="button" aria-label="ticket"></button>
-
-      <!-- ✅ (2) 위 흰색 영역 터치(게이트 오픈) -->
       <button class="hotspot topHotspot" id="topHotspot" type="button" aria-label="open gate"></button>
 
-      <!-- ✅ (2) 게이트 오버레이 -->
+      <!-- ✅ 게이트(열렸을 때만) -->
       <div class="gateWrap" id="gateWrap" aria-hidden="true">
-        <!-- gate 뒤 색 변화 레이어: gate와 동일 크기 -->
-        <div class="gateTint" id="gateTint"></div>
-
-        <!-- ✅ gateMover: translateX 적용되는 그룹(게이트 + 화살표 같이 이동) -->
-        <div class="gateMover" id="gateMover">
-          <img class="gateCardImg" src="./assets/gate_card.png" alt="gate" />
-          <img class="arrowImg" id="arrowImg" src="./assets/arrows.png" alt="arrows" />
-        </div>
-
-        <!-- 노란 안내(고정) -->
+        <!-- 노란 안내(항상 화면 기준으로 올려둠) -->
         <div class="noticeLayer" id="noticeLayer" aria-hidden="true">
           <img class="noticeImg" src="./assets/notice.png" alt="notice" />
         </div>
+
+        <!-- ✅ gateBox = “게이트 카드가 실제로 있는 영역” (중요) -->
+        <div class="gateBox" id="gateBox" aria-hidden="true">
+          <!-- gate 뒤 색 레이어(게이트와 동일 크기) -->
+          <div class="gateTint" id="gateTint"></div>
+
+          <!-- ✅ gateMover = 드래그로 같이 이동(게이트+화살표 같이) -->
+          <div class="gateMover" id="gateMover" aria-label="gate drag area">
+            <img class="gateCardImg" src="./assets/gate_card.png" alt="gate card" />
+            <img class="arrowImg" id="arrowImg" src="./assets/arrows.png" alt="arrows" />
+          </div>
+        </div>
       </div>
 
-      <!-- ✅ (3) 사용완료 토스트 -->
+      <!-- ✅ 사용완료 토스트(게이트 자리에서 잠깐 뜨고 페이드) -->
       <div class="usedToast" id="usedToast" aria-hidden="true">
         <img class="usedToastImg" src="./assets/used_toast.png" alt="used toast" />
       </div>
