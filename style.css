@@ -1,352 +1,201 @@
 :root{
-  --bg:#f2f2f2;
-  --card:#ffffff;
-  --border:#e5e5e8;
-  --teal:#1aa7a5;
+  /* ===== 핫스팟 위치(퍼센트) =====
+     화면 이미지 위에서 클릭/터치가 먹는 영역.
+     필요하면 숫자만 조금씩 조절해. */
+  --ticket-left: 6%;
+  --ticket-top: 44%;
+  --ticket-w: 88%;
+  --ticket-h: 20%;
 
-  --pink:#e14a8c;
-  --pink-dark:#c93574;
-  --gray:#dcdcdc;
-  --muted:#666;
+  --top-left: 0%;
+  --top-top: 0%;
+  --top-w: 100%;
+  --top-h: 40%;
 
-  --stamp:#e53935;
+  /* ===== 오버레이 텍스트 위치(퍼센트) ===== */
+  --time-left: 14%;
+  --time-top: 13.6%;
+  --time-size: 18px;
 
-  /* ✅ 오늘 게이트 색 바꾸려면 여기 4개만 수정 */
-  --gate-bg-start:#0b56d6;
-  --gate-bg-end:#0a44b3;
-  --gate-text:#32c5ff;
-  --gate-arrow:#ffd400;
+  --label-left: 62%;
+  --label-top: 13.6%;
+  --label-size: 18px;
 }
 
-*{ box-sizing:border-box; }
-
+*{ box-sizing: border-box; }
 html, body{
   margin:0;
-  background:#111;
+  background:#000;
   height:100%;
+  font-family: -apple-system, system-ui, "Hiragino Sans", "Noto Sans JP", sans-serif;
   -webkit-font-smoothing: antialiased;
-  text-rendering: geometricPrecision;
-  font-family:
-    -apple-system,
-    system-ui,
-    "Hiragino Sans",
-    "Hiragino Kaku Gothic ProN",
-    "Noto Sans JP",
-    sans-serif;
 }
 
-body{ overscroll-behavior: none; }
-
 .app{
-  max-width: 430px;
+  width: min(430px, 100vw);
   margin: 0 auto;
-  background: var(--bg);
+  background:#000;
   min-height: 100vh;
 }
 
-/* Status bar */
-.statusbar{
-  padding: 0 14px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  background:#fff;
-
-  padding-top: env(safe-area-inset-top, 0px);
-  height: calc(44px + env(safe-area-inset-top, 0px));
+.screenWrap{
+  position: relative;
+  width: 100%;
+  background:#000;
 }
-.sb-left{ font-weight:800; font-size:20px; }
-.sb-right{ font-weight:800; color:#333; font-size:18px; }
 
-/* Header */
-.top{
-  position: sticky;
-  top: calc(44px + env(safe-area-inset-top, 0px));
+.screenImg{
+  width: 100%;
+  height: auto;
+  display:block;
+  user-select:none;
+  pointer-events:none;
+}
+
+/* 오버레이 텍스트 */
+.overlay{
+  position:absolute;
   z-index: 20;
-  background:#fff;
-  border-bottom: 1px solid var(--border);
-}
-.top-row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding: 14px 14px;
-  font-size: 20px;
-  font-weight: 800;
-}
-.accent{ color: var(--pink-dark); }
-.top-close{
-  border:none;
-  background:transparent;
-  font-size:26px;
-  cursor:pointer;
-  color:#777;
-}
-.timebar{
-  background: var(--teal);
+  pointer-events:none;
   color:#fff;
-  text-align:center;
-  font-weight:900;
-  padding: 10px 12px;
-  font-size: 22px;
+  font-weight: 900;
+  text-shadow: 0 2px 0 rgba(0,0,0,.15);
+}
+
+.timeText{
+  left: var(--time-left);
+  top: var(--time-top);
+  font-size: var(--time-size);
   letter-spacing: .3px;
 }
 
-.content{ padding: 12px; }
-
-/* Event card */
-.eventCard{
-  position: relative;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  overflow:hidden;
+.labelText{
+  left: var(--label-left);
+  top: var(--label-top);
+  font-size: var(--label-size);
+  text-align:right;
+  width: 34%;
+  opacity: .0; /* 기본 숨김(원하면 1로) */
 }
 
-.eventTop{
-  display:flex;
-  align-items:flex-start;
-  justify-content:space-between;
-  padding: 16px 14px 8px;
+/* 핫스팟 */
+.hotspot{
+  position:absolute;
+  z-index: 30;
+  background: transparent;
+  border:0;
+  padding:0;
 }
-.dateBlock{ display:flex; align-items:baseline; gap:10px; }
-.dateMain{
-  font-size: 62px;
-  font-weight: 900;
-  letter-spacing: -1px;
-  line-height: 1;
-}
-.dateSub{ font-weight:900; font-size: 22px; }
-.timeInfo{ font-weight: 900; line-height: 1.25; padding-top: 6px; font-size:22px; }
 
-.starsRow{
-  display:flex;
-  justify-content: space-between;
-  align-items:center;
-  padding: 0 118px;
-  margin: 4px 0 2px;
-  pointer-events:none;
+/* 티켓 영역 */
+.ticketHotspot{
+  left: var(--ticket-left);
+  top: var(--ticket-top);
+  width: var(--ticket-w);
+  height: var(--ticket-h);
 }
-.starAbs{
-  width: 32px;
-  height: 32px;
-  border-radius: 999px;
-  background: #8fe27c;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+
+/* 위 흰색 영역(게이트 트리거) */
+.topHotspot{
+  left: var(--top-left);
+  top: var(--top-top);
+  width: var(--top-w);
+  height: var(--top-h);
 }
-.starSvg{ width:92%; height:92%; fill:#fff; display:block; transform: translateY(0.6px); }
 
-.eventMeta{ padding: 4px 14px 12px; }
-.venue{ font-weight:900; font-size: 22px; margin: 0 0 4px; letter-spacing:-.2px; }
-.artist{ color: var(--muted); font-weight: 700; margin:0; font-size: 18px; }
-
-/* GATE overlay */
+/* ===== 게이트 오버레이 ===== */
 .gateWrap{
   position:absolute;
-  inset:0;
+  inset: 0;
   display:none;
-  z-index: 30;
-  border-radius: 18px;
+  z-index: 60;
   overflow:hidden;
-  touch-action: none;
-  user-select: none;
 }
 .gateWrap.open{ display:block; }
 
-.gateBehind{
+/* 진행도 tint 레이어(색 변화) */
+.gateTint{
   position:absolute;
   inset:0;
-  background:#2B79B8;
+  background: transparent;
+  opacity: .35;
+  pointer-events:none;
+  z-index: 61;
+  transition: background-color 60ms linear;
 }
 
+/* gateFront는 translateX로 움직임 */
 .gateFront{
   position:absolute;
   inset:0;
-  background: linear-gradient(180deg, var(--gate-bg-start), var(--gate-bg-end));
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  z-index: 62;
   will-change: transform;
+  touch-action: none;
 }
-
-/* gate bottom dashed line */
-.gateFront::after{
-  content:"";
-  position:absolute;
-  left:0; right:0;
-  bottom:0;
-  border-bottom: 3px dashed rgba(255,255,255,.55);
-}
-
-.gateIcons{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap: 28px;
-  transform: translateY(-1px);
-}
-
-.chevGroup{
-  display:flex;
-  gap: 8px;
-  flex: 0 0 auto;
-}
-.chev{
-  width:0; height:0;
-  border-top: 16px solid transparent;
-  border-bottom: 16px solid transparent;
-  filter: drop-shadow(0 2px 0 rgba(0,0,0,.22));
-}
-.chevGroup.left .chev{ border-right: 24px solid var(--gate-arrow); }
-.chevGroup.right .chev{ border-left: 24px solid var(--gate-arrow); }
-
-.gateText{
-  font-size: 48px;
-  font-weight: 600;
-  letter-spacing: 1px;
-  color: var(--gate-text);
-  text-shadow: 0 2px 0 rgba(0,0,0,.14);
-  line-height: 1;
-}
-
-/* yellow notice (fixed above timebar) */
-.gateNotice{
-  position: fixed;
-  top: calc(44px + env(safe-area-inset-top, 0px));
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(430px, 100%);
-  z-index: 9999;
-  background: #e3e32b;
-  padding: 10px 12px;
-  border-radius: 2px;
-  display:none;
-}
-.gateNoticeText{
-  color: #d60000;
-  font-weight: 900;
-  font-size: 18px;
-  line-height: 1.25;
-  letter-spacing: -0.2px;
-}
-
-/* Ticket */
-.tickets{ margin-top: 12px; }
-
-.ticket{
-  border-radius: 18px;
-  overflow:hidden;
-  border: 1px solid #e6e6e6;
-  background: #fff;
-}
-
-.ticketHeader{
-  padding: 14px 16px;
-  font-weight: 900;
-  font-size: 26px;
-  background:#fff;
-  color:#111;
-  border-bottom: 2px dashed rgba(0,0,0,.22);
-}
-
-.ticketBody{
+.gateCardImg{
   width:100%;
-  border:none;
-  text-align:left;
-  display:flex;
-  gap: 14px;
-  align-items:center;
-  padding: 14px 16px;
-  position:relative;
-  cursor:pointer;
+  height:100%;
+  object-fit: cover;
+  display:block;
+  pointer-events:none;
+  user-select:none;
 }
 
-.ticketBody.idle{ background:#fff; color:#111; }
-.ticketBody.selected{ background: var(--pink); color:#fff; }
-
-.ticketIcon{
-  width: 70px;
-  height: 70px;
-  border-radius: 999px;
+/* 화살표 레이어(고정) */
+.arrowLayer{
+  position:absolute;
+  inset:0;
+  z-index: 63;
   display:flex;
   align-items:center;
   justify-content:center;
-  flex: 0 0 auto;
+  pointer-events:none;
 }
-.ticketIcon.ok{
-  background: rgba(255,255,255,.92);
-  color: var(--pink-dark);
-}
-.checkSvg{ width: 34px; height: 34px; display:block; }
-
-.ticketText{ flex:1; }
-.ticketTitle{
-  font-size: 34px;
-  font-weight: 900;
-  letter-spacing: -0.3px;
-  line-height: 1.05;
-}
-.ticketSub{
-  font-size: 22px;
-  font-weight: 900;
-  letter-spacing: -0.2px;
-  line-height: 1.1;
-  margin-top: 6px;
-  opacity:.95;
-}
-.ticketNo{
-  font-size: 40px;
-  font-weight: 900;
-  letter-spacing: -0.4px;
-  margin-top: 10px;
-  line-height: 1.0;
+.arrowImg{
+  width:100%;
+  height:100%;
+  object-fit: cover;
+  display:block;
 }
 
-/* Used state */
-.ticket.used .ticketHeader{
-  background: var(--pink);
-  color:#fff;
-  border-bottom: none;
-}
-.ticket.used .ticketBody{
-  background: var(--gray) !important;
-  color:#111;
-  cursor:default;
-}
-.ticket.used .ticketIcon{
-  background: rgba(0,0,0,.12);
-  color:#111;
-}
-
-/* stamp with gray fill */
-.stamp{
+/* 노란 안내 */
+.noticeLayer{
   position:absolute;
-  right: 14px;
-  top: 18px;
-  transform: rotate(-14deg);
-  border: 5px solid var(--stamp);
-  color: var(--stamp);
-  font-weight: 1000;
-  font-size: 30px;
-  padding: 6px 14px;
-  border-radius: 10px;
-  background: rgba(220,220,220,.85);
-  letter-spacing: 0.6px;
-  display:none;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.25);
+  inset:0;
+  z-index: 64;
+  pointer-events:none;
 }
-.ticket.used .stamp{ display:block; }
+.noticeImg{
+  width:100%;
+  height:100%;
+  object-fit: cover;
+  display:block;
+}
 
-.usedAt{
-  background: var(--gray);
-  padding: 12px 16px 14px;
-  font-weight: 900;
-  color:#333;
-  border-top: 2px dashed rgba(0,0,0,.22);
+/* ===== 사용완료 토스트 ===== */
+.usedToast{
+  position:absolute;
+  inset:0;
+  z-index: 80;
   display:none;
-  font-size: 22px;
-  letter-spacing: -0.1px;
+  pointer-events:none;
+  opacity: 0;
+  transform: translateY(0);
 }
-.ticket.used .usedAt{ display:block; }
+.usedToastImg{
+  width:100%;
+  height:100%;
+  object-fit: cover;
+  display:block;
+}
+
+.usedToast.show{
+  display:block;
+  opacity: 1;
+  transition: opacity 120ms ease;
+}
+
+.usedToast.fade{
+  opacity: 0;
+  transition: opacity 240ms ease;
+}
