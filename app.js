@@ -172,23 +172,38 @@ function markUsed(){
   selected = false;
   selText.textContent = "0/1";
 
+  // ✅ ticket 전체에 used 상태 부여
   ticket.classList.add("used");
-  ticketBtn.classList.remove("selected");
-  ticketBtn.classList.add("idle");
+
+  // ✅ 버튼 클래스 정리: idle/selected 제거 (이게 회색 안 뜨는 원인)
+  ticketBtn.classList.remove("selected", "idle");
+  // 필요하면 used용 클래스 추가(선택)
+  ticketBtn.classList.add("used");
+
+  // ✅ 헤더는 핑크 유지
   ticketHeader.style.background = "var(--pink)";
   ticketHeader.style.color = "#fff";
   ticketHeader.style.borderBottom = "none";
 
-  // 아이콘/텍스트는 그대로 두고, usedAt만 채움
+  // ✅ 아이콘도 사용됨으로 변경 (원본 느낌)
+  ticketIcon.classList.remove("ok");
+  ticketIcon.classList.add("used");
+  ticketIcon.textContent = "🎟"; // 원하면 "✓"로 해도 됨
+
+  // ✅ 사용일시 채우기
   const d = new Date();
   const usedLine =
     `使用日時: ${d.getFullYear()}/${pad(d.getMonth()+1)}/${pad(d.getDate())}(${dayJP(d)}) ` +
     `${pad(d.getHours())}:${pad(d.getMinutes())}`;
   usedAt.textContent = usedLine;
 
-  // Dynamic Island DONE 느낌
+  // ✅ 사용일시 보이게(혹시 CSS가 안 먹을 때 대비)
+  usedAt.style.display = "block";
+
+  // Dynamic Island DONE
   setIslandMode("mode-done","DONE");
 }
+
 
 gateFront.addEventListener("pointerup", () => {
   if (!dragging) return;
@@ -209,3 +224,4 @@ gateFront.addEventListener("pointercancel", () => {
   dragging = false;
   snapBack();
 });
+
