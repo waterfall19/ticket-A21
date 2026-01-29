@@ -9,35 +9,29 @@ const gateTint = document.getElementById("gateTint");
 const arrowImg = document.getElementById("arrowImg");
 
 const usedToast = document.getElementById("usedToast");
-
 const timeText = document.getElementById("timeText");
 
-/* 이미지 경로 */
 const ASSETS = {
   idle: "./assets/screen_idle.png",
   selected: "./assets/screen_selected.png",
   used: "./assets/screen_used.png",
 };
 
-/* 상태 */
-let state = "idle";   // idle | selected | used
+let state = "idle"; // idle | selected | used
 let gateOpen = false;
 
-/* ===== 시간(밀리초 포함) ===== */
+/* ✅ 시간: HH:MM:SS.ms만 */
 function pad(n){ return String(n).padStart(2,"0"); }
-function dayJP(d){ return ["日","月","火","水","木","金","土"][d.getDay()]; }
-
 function tickTime(){
   const d = new Date();
   const ms2 = Math.floor(d.getMilliseconds()/10).toString().padStart(2,"0");
   timeText.textContent =
-    `${d.getFullYear()}/${pad(d.getMonth()+1)}/${pad(d.getDate())} (${dayJP(d)}) ` +
     `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}.${ms2}`;
 }
 tickTime();
 setInterval(tickTime, 50);
 
-/* ===== 티켓 클릭: idle <-> selected ===== */
+/* 티켓 클릭: idle <-> selected */
 ticketHotspot.addEventListener("click", () => {
   if (state === "used") return;
 
@@ -50,38 +44,32 @@ ticketHotspot.addEventListener("click", () => {
   }
 });
 
-/* ===== 상단 흰 영역 클릭: selected일 때 gate open ===== */
+/* 상단 클릭: selected에서 gate open */
 topHotspot.addEventListener("click", () => {
   if (state !== "selected") return;
   if (gateOpen) return;
   openGate();
 });
 
-/* ===== gate open/close ===== */
 function openGate(){
   gateOpen = true;
   gateWrap.classList.add("open");
-  gateWrap.setAttribute("aria-hidden","false");
-  gateBox.setAttribute("aria-hidden","false");
 
   gateMover.style.transform = "translateX(0px)";
   gateMover.style.transition = "";
-  gateTint.style.backgroundColor = fixedColors[0];
   curX = 0;
 
+  gateTint.style.backgroundColor = fixedColors[0];
   startArrowBlink();
 }
 
 function closeGate(){
   gateOpen = false;
   gateWrap.classList.remove("open");
-  gateWrap.setAttribute("aria-hidden","true");
-  gateBox.setAttribute("aria-hidden","true");
-
   stopArrowBlink();
 }
 
-/* ===== 화살표 깜빡(opacity) ===== */
+/* 화살표 blink */
 let blinkTimer = null;
 let blinkState = false;
 
@@ -99,7 +87,7 @@ function stopArrowBlink(){
   arrowImg.style.opacity = "1";
 }
 
-/* ===== gateTint 색 변화 ===== */
+/* 진행도 색 */
 const fixedColors = [
   "#2B79B8",
   "#3A9AA3",
@@ -118,14 +106,13 @@ function colorFromProgress(p){
   return fixedColors[5];
 }
 
-/* ===== 드래그: gateMover 이동 + tint 변화 ===== */
+/* 드래그 */
 let dragging = false;
 let startX = 0;
 let curX = 0;
 
 function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
 function getMaxX(){
-  // ✅ gateBox 기준 폭으로 드래그 거리 계산해야 “게이트 크기와 동일”하게 동작함
   const w = gateBox.getBoundingClientRect().width;
   return w * 0.92;
 }
@@ -157,11 +144,8 @@ gateMover.addEventListener("pointerup", () => {
   const maxX = getMaxX();
   const prog = maxX === 0 ? 0 : (curX / maxX);
 
-  if (prog >= 0.85) {
-    finishUse();
-  } else {
-    snapBack();
-  }
+  if (prog >= 0.85) finishUse();
+  else snapBack();
 });
 
 gateMover.addEventListener("pointercancel", () => {
@@ -177,7 +161,7 @@ function snapBack(){
   setTimeout(() => { gateMover.style.transition = ""; }, 190);
 }
 
-/* ===== 사용 완료 ===== */
+/* 사용 완료 */
 function finishUse(){
   closeGate();
   gateTint.style.backgroundColor = "transparent";
@@ -191,14 +175,12 @@ function finishUse(){
 function showUsedToast(){
   usedToast.classList.remove("fade");
   usedToast.classList.add("show");
-  usedToast.setAttribute("aria-hidden","false");
 
   setTimeout(() => {
     usedToast.classList.add("fade");
     setTimeout(() => {
       usedToast.classList.remove("show");
       usedToast.classList.remove("fade");
-      usedToast.setAttribute("aria-hidden","true");
     }, 260);
   }, 600);
 }
