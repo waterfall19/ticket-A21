@@ -529,3 +529,5 @@ html, body {
 @supports (-webkit-touch-callout: none) {
   /* iOS Safari 전용 보정 */
 }
+
+.ticket.used .ticketBody { background: var(--gray) !important; }
