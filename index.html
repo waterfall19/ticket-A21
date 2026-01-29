@@ -1,206 +1,198 @@
-const screenImg = document.getElementById("screenImg");
-const ticketHotspot = document.getElementById("ticketHotspot");
-const topHotspot = document.getElementById("topHotspot");
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Gate Ticket</title>
 
-const gateWrap = document.getElementById("gateWrap");
-const gateMover = document.getElementById("gateMover");
-const gateTint = document.getElementById("gateTint");
-const arrowImg = document.getElementById("arrowImg");
+<style>
+* {
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
+}
 
-const usedToast = document.getElementById("usedToast");
+body {
+  margin: 0;
+  background: #eef2f7;
+}
 
-const timeText = document.getElementById("timeText");
-const blockText = document.getElementById("blockText");
-const numText = document.getElementById("numText");
+/* ===== 상단 시간 바 ===== */
+.time-bar {
+  background: #66aeb6;
+  color: #fff;
+  text-align: center;
+  padding: 10px;
+  font-weight: 600;
+}
 
-/* ===== 이미지 경로 ===== */
-const ASSETS = {
-  idle: "./assets/screen_idle.png",
-  selected: "./assets/screen_selected.png",
-  used: "./assets/screen_used.png",
-};
+/* ===== 주의 문구 ===== */
+.notice {
+  background: #f0ef5a;
+  color: #b31212;
+  padding: 10px;
+  font-size: 14px;
+}
 
-/* ===== 텍스트 값(네가 원하는 값으로 바꿔도 됨) ===== */
-blockText.textContent = "F";   // 작은 동그라미(블록)
-numText.textContent = "60";    // 긴 동그라미(번호)
+/* ===== GATE 영역 ===== */
+.gate-wrapper {
+  position: relative;
+  margin: 20px;
+  overflow: hidden;
+  border-radius: 12px;
+}
 
-/* ===== 상태 ===== */
-let state = "idle";      // idle | selected | used
-let gateOpen = false;
+/* gate 뒤 레이어 */
+.gate-bg {
+  position: absolute;
+  inset: 0;
+  background: #2f4aa0;
+  opacity: 0.35; /* ✅ 투명도 조절 */
+}
 
-/* ===== (상단 시간: 밀리초 포함) ===== */
-function pad(n){ return String(n).padStart(2,"0"); }
-function dayJP(d){ return ["日","月","火","水","木","金","土"][d.getDay()]; }
+/* gate 본체 */
+.gate {
+  position: relative;
+  background: #2f4aa0;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  touch-action: pan-x;
+  user-select: none;
+}
 
-function tickTime(){
+/* 화살표 */
+.arrow {
+  color: rgba(255,255,255,0.5);
+  font-size: 28px;
+}
+
+.gate-text {
+  color: #7cc4ff;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+/* ===== 티켓 ===== */
+.ticket {
+  margin: 20px;
+  background: #c95a8a;
+  border-radius: 12px;
+  color: #fff;
+  padding: 20px;
+}
+
+/* 터치 영역 = 시각 영역 동일 */
+.ticket-inner {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.check {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #fff;
+  color: #c95a8a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.ticket-text {
+  flex: 1;
+}
+
+.big {
+  font-size: 36px;
+  font-weight: 800;
+}
+</style>
+</head>
+
+<body>
+
+<div class="notice">
+  スライドすると使用済になります。使用済チケットは、入場・再発行不可
+</div>
+
+<div class="time-bar" id="time"></div>
+
+<!-- GATE -->
+<div class="gate-wrapper">
+  <div class="gate-bg"></div>
+
+  <div class="gate" id="gate">
+    <div class="arrow">◀◀</div>
+    <div class="gate-text">GATE</div>
+    <div class="arrow">▶▶</div>
+  </div>
+</div>
+
+<!-- TICKET -->
+<div class="ticket">
+  <div class="ticket-inner">
+    <div class="check">✓</div>
+    <div class="ticket-text">
+      <div>スタンディング</div>
+      <div>ブロック 整理番号</div>
+      <div class="big">F&nbsp;&nbsp;60</div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===== 시간 (밀리초 포함) ===== */
+function updateTime() {
   const d = new Date();
-  const ms2 = Math.floor(d.getMilliseconds()/10).toString().padStart(2,"0");
-  timeText.textContent =
-    `${d.getFullYear()}/${pad(d.getMonth()+1)}/${pad(d.getDate())} (${dayJP(d)}) ` +
-    `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}.${ms2}`;
+  const pad = n => n.toString().padStart(2, "0");
+  const ms = d.getMilliseconds().toString().padStart(2, "0");
+
+  document.getElementById("time").innerText =
+    `${d.getFullYear()}/${pad(d.getMonth()+1)}/${pad(d.getDate())} (${["日","月","火","水","木","金","土"][d.getDay()]}) `
+    + `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}.${ms}`;
 }
-tickTime();
-setInterval(tickTime, 50);
+setInterval(updateTime, 10);
+updateTime();
 
-/* ===== (1) 티켓 터치: 흰색 ↔ 핑크 ===== */
-ticketHotspot.addEventListener("click", () => {
-  if (state === "used") return;
-
-  if (state === "idle") {
-    state = "selected";
-    screenImg.src = ASSETS.selected;
-  } else {
-    state = "idle";
-    screenImg.src = ASSETS.idle;
-  }
-});
-
-/* ===== (2) 위 흰색 영역 터치: gate open (선택 상태만) ===== */
-topHotspot.addEventListener("click", () => {
-  if (state !== "selected") return;
-  if (gateOpen) return;
-  openGate();
-});
-
-/* ===== gate open/close ===== */
-function openGate(){
-  gateOpen = true;
-  gateWrap.classList.add("open");
-  gateWrap.setAttribute("aria-hidden","false");
-
-  gateMover.style.transform = "translateX(0px)";
-  gateMover.style.transition = "";
-  gateTint.style.backgroundColor = "transparent";
-
-  curX = 0;
-  startArrowBlink();
-}
-
-function closeGate(){
-  gateOpen = false;
-  gateWrap.classList.remove("open");
-  gateWrap.setAttribute("aria-hidden","true");
-  stopArrowBlink();
-}
-
-/* ===== 화살표 opacity 깜빡 ===== */
-let blinkTimer = null;
-let blinkState = false;
-
-function startArrowBlink(){
-  stopArrowBlink();
-  blinkState = false;
-  blinkTimer = setInterval(() => {
-    blinkState = !blinkState;
-    arrowImg.style.opacity = blinkState ? "1" : "0.35";
-  }, 220);
-}
-
-function stopArrowBlink(){
-  if (blinkTimer) clearInterval(blinkTimer);
-  blinkTimer = null;
-  arrowImg.style.opacity = "1";
-}
-
-/* ===== gateTint 진행도 색 ===== */
-const fixedColors = [
-  "#2B79B8",
-  "#3A9AA3",
-  "#3A9C88",
-  "#8DB66A",
-  "#F3EA63",
-  "#E65752",
-];
-function colorFromProgress(p){
-  const t = Math.max(0, Math.min(1, p));
-  if (t < 1/12) return fixedColors[0];
-  if (t < 2/12) return fixedColors[1];
-  if (t < 3/12) return fixedColors[2];
-  if (t < 4/12) return fixedColors[3];
-  if (t < 5/12) return fixedColors[4];
-  return fixedColors[5];
-}
-
-/* ===== (드래그) gateMover 이동 + tint 변화 ===== */
-let dragging = false;
+/* ===== GATE 슬라이드 ===== */
+const gate = document.getElementById("gate");
 let startX = 0;
-let curX = 0;
+let currentX = 0;
+let dragging = false;
 
-function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
-function getMaxX(){
-  const w = gateWrap.getBoundingClientRect().width;
-  return w * 0.92;
-}
-
-gateMover.addEventListener("pointerdown", (e) => {
-  if (!gateOpen) return;
-  if (state !== "selected") return;
-
+gate.addEventListener("touchstart", e => {
+  startX = e.touches[0].clientX;
   dragging = true;
-  startX = e.clientX - curX;
-  gateMover.setPointerCapture(e.pointerId);
 });
 
-gateMover.addEventListener("pointermove", (e) => {
+gate.addEventListener("touchmove", e => {
   if (!dragging) return;
-
-  const maxX = getMaxX();
-  curX = clamp(e.clientX - startX, 0, maxX);
-  gateMover.style.transform = `translateX(${curX}px)`;
-
-  const prog = maxX === 0 ? 0 : (curX / maxX);
-  gateTint.style.backgroundColor = colorFromProgress(prog);
+  currentX = e.touches[0].clientX - startX;
+  gate.style.transform = `translateX(${currentX}px)`;
 });
 
-gateMover.addEventListener("pointerup", () => {
-  if (!dragging) return;
+gate.addEventListener("touchend", () => {
   dragging = false;
 
-  const maxX = getMaxX();
-  const prog = maxX === 0 ? 0 : (curX / maxX);
-
-  if (prog >= 0.85) {
-    finishUse();
+  if (Math.abs(currentX) > 120) {
+    gate.style.transition = "transform 0.3s ease";
+    gate.style.transform = `translateX(${currentX > 0 ? 1000 : -1000}px)`;
   } else {
-    snapBack();
+    gate.style.transition = "transform 0.3s ease";
+    gate.style.transform = "translateX(0)";
   }
-});
-
-gateMover.addEventListener("pointercancel", () => {
-  dragging = false;
-  snapBack();
-});
-
-function snapBack(){
-  gateMover.style.transition = "transform 180ms ease";
-  gateMover.style.transform = "translateX(0px)";
-  curX = 0;
-  gateTint.style.backgroundColor = "transparent";
-  setTimeout(() => { gateMover.style.transition = ""; }, 190);
-}
-
-/* ===== (3) 사용 완료: screen_used로 + 토스트 ===== */
-function finishUse(){
-  closeGate();
-  gateTint.style.backgroundColor = "transparent";
-
-  state = "used";
-  screenImg.src = ASSETS.used;
-
-  showUsedToast();
-}
-
-function showUsedToast(){
-  usedToast.classList.remove("fade");
-  usedToast.classList.add("show");
-  usedToast.setAttribute("aria-hidden","false");
 
   setTimeout(() => {
-    usedToast.classList.add("fade");
-    setTimeout(() => {
-      usedToast.classList.remove("show");
-      usedToast.classList.remove("fade");
-      usedToast.setAttribute("aria-hidden","true");
-    }, 260);
-  }, 600);
-}
+    gate.style.transition = "";
+    currentX = 0;
+  }, 300);
+});
+</script>
+
+</body>
+</html>
