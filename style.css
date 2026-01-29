@@ -1,47 +1,42 @@
 :root{
-  /* screen_* 비율 (너 이미지가 941x2048) */
+  /* screen_* 비율 고정(941x2048) */
   --screen-w: 941;
   --screen-h: 2048;
 
-  /* ===== (핫스팟) 티켓 영역 =====
-     지금 값은 대략값이야.
-     화면에서 티켓 클릭이 살짝 어긋나면 여기만 미세조정하면 됨. */
-  --ticket-left: 2%;
-  --ticket-top: 33.5%;
-  --ticket-w: 96%;
-  --ticket-h: 18%;
+  /* ✅ 티켓 핫스팟(핑크 티켓 영역 기준) */
+  --ticket-left: 0%;
+  --ticket-top: 34.03%;
+  --ticket-w: 100%;
+  --ticket-h: 15.77%;
 
-  /* ===== (핫스팟) 위 흰 영역(게이트 여는 영역) ===== */
+  /* ✅ 상단 핫스팟(티켓 위) */
   --top-left: 0%;
   --top-top: 0%;
   --top-w: 100%;
-  --top-h: 33.5%;
+  --top-h: 34.03%;
 
-  /* ===== (게이트 박스) 게이트가 실제로 보이는 영역 =====
-     게이트 카드가 “화면 어디에 떠있는지”에 맞춰 잡는 값.
-     (너가 올린 screen_selected 기준으로 상단 영역에 게이트 뜨는 자리) */
+  /* ✅ 게이트 박스 위치 (청록바 끝~핑크 시작 사이로 맞춤) */
   --gate-left: 0%;
-  --gate-top: 18.5%;
+  --gate-top: 14.84%;
   --gate-w: 100%;
-  --gate-h: 16.5%;
+  --gate-h: 19.19%;
 
-  /* ===== (텍스트) 동그라미 3곳 ===== */
-  /* 1) 청록바 오른쪽 시간 */
+  /* ===== 텍스트 위치 ===== */
+  /* 1) 시간: (날짜/요일 삭제, HH:MM:SS.ms만) + 청록바 중앙에 오도록 위로 살짝 올림 */
   --time-right: 6%;
-  --time-top: 12.0%;
+  --time-top: 11.4%;
   --time-size: clamp(16px, 2.2vw, 22px);
 
-  /* 2) 핑크 티켓 블록(F) */
-  --block-left: 44.5%;
-  --block-top: 48.2%;
+  /* 2) F / 3) 60 : 핑크 안쪽에 딱 들어가게 */
+  --block-left: 46%;
+  --block-top: 48.8%;
   --block-size: clamp(22px, 3vw, 34px);
 
-  /* 3) 핑크 티켓 번호(60) */
-  --num-left: 56.5%;
-  --num-top: 47.9%;
+  --num-left: 58%;
+  --num-top: 48.4%;
   --num-size: clamp(34px, 4.5vw, 54px);
 
-  /* ===== gate 뒤 레이어 투명도(요구사항: 1이어야 함) ===== */
+  /* ✅ gateTint opacity = 1 (100%) */
   --gate-tint-opacity: 1;
 }
 
@@ -62,7 +57,7 @@ html, body{
   background:#f2f2f2;
 }
 
-/* ✅ 화면 컨테이너: 비율 고정 */
+/* 화면 컨테이너(비율 고정) */
 .screenWrap{
   position: relative;
   width: 100%;
@@ -82,7 +77,7 @@ html, body{
   user-select:none;
 }
 
-/* ===== 텍스트 오버레이 ===== */
+/* 텍스트 오버레이 */
 .overlay{
   position:absolute;
   z-index: 30;
@@ -103,7 +98,6 @@ html, body{
   left: var(--block-left);
   top: var(--block-top);
   font-size: var(--block-size);
-  letter-spacing: .2px;
 }
 
 .numText{
@@ -113,7 +107,7 @@ html, body{
   letter-spacing: .4px;
 }
 
-/* ===== 핫스팟 ===== */
+/* 핫스팟 */
 .hotspot{
   position:absolute;
   background: transparent;
@@ -121,7 +115,7 @@ html, body{
   padding:0;
 }
 
-/* ✅ 티켓이 우선 터치되도록 위로 */
+/* 티켓 우선 터치 */
 .ticketHotspot{ z-index: 55; }
 .topHotspot{ z-index: 45; }
 
@@ -139,17 +133,16 @@ html, body{
   height: var(--top-h);
 }
 
-/* ===== 게이트 오버레이 ===== */
+/* 게이트 오버레이 */
 .gateWrap{
   position:absolute;
   inset:0;
   display:none;
   z-index: 80;
-  overflow:hidden;
 }
 .gateWrap.open{ display:block; }
 
-/* 노란 안내(화면 전체 기준으로 올림) */
+/* 노란 안내(고정) */
 .noticeLayer{
   position:absolute;
   inset:0;
@@ -161,11 +154,11 @@ html, body{
   height:100%;
   object-fit: cover;
   display:block;
-  user-select:none;
   pointer-events:none;
+  user-select:none;
 }
 
-/* ✅ gateBox: “게이트 카드가 존재하는 영역” */
+/* ✅ 게이트 박스: “똑바로” 보이게 화면에서 딱 그 자리만 */
 .gateBox{
   position:absolute;
   left: var(--gate-left);
@@ -174,31 +167,32 @@ html, body{
   height: var(--gate-h);
   z-index: 90;
   overflow:hidden;
-  pointer-events:none; /* 실제 드래그는 gateMover가 받음 */
+  pointer-events:none;
 }
 
-/* ✅ gateTint: gate와 크기 동일 + opacity 1 */
+/* gateTint: 게이트와 동일 크기 + opacity 1 */
 .gateTint{
   position:absolute;
   inset:0;
-  background: transparent;
   opacity: var(--gate-tint-opacity);
+  background: transparent;
   z-index: 91;
   pointer-events:none;
   transition: background-color 60ms linear;
 }
 
-/* ✅ gateMover: 게이트+화살표 같이 밀림 */
+/* ✅ gateMover: 이걸 밀면 gate+arrow 같이 이동 */
 .gateMover{
   position:absolute;
   inset:0;
   z-index: 92;
   will-change: transform;
   touch-action:none;
-  pointer-events:auto;  /* 드래그 받는 유일한 레이어 */
+  pointer-events:auto;
 }
 
-/* 이미지들은 gateBox를 꽉 채우되, 원본 이미지가 검정 여백 포함이면 cover로 잘라서 카드만 꽉 차게 */
+/* ✅ 게이트가 “똑바로/안 찌그러지게” 보이게:
+   - gate_card.png 자체가 카드 영역을 포함하고 있으니 cover로 박스 꽉 채움 */
 .gateCardImg,
 .arrowImg{
   position:absolute;
@@ -207,11 +201,11 @@ html, body{
   height:100%;
   object-fit: cover;
   display:block;
-  user-select:none;
   pointer-events:none;
+  user-select:none;
 }
 
-/* ===== 사용완료 토스트: gateBox 위치에 맞춰서 뜨게 ===== */
+/* 사용완료 토스트: 게이트 자리에서 뜸 */
 .usedToast{
   position:absolute;
   left: var(--gate-left);
@@ -224,28 +218,25 @@ html, body{
   opacity: 0;
   overflow:hidden;
 }
-
 .usedToastImg{
   width:100%;
   height:100%;
   object-fit: cover;
   display:block;
-  user-select:none;
   pointer-events:none;
+  user-select:none;
 }
-
 .usedToast.show{
   display:block;
   opacity: 1;
   transition: opacity 120ms ease;
 }
-
 .usedToast.fade{
   opacity: 0;
   transition: opacity 240ms ease;
 }
 
-/* ---- 디버그(원하면 body에 debug 클래스 붙여서 확인) ---- */
+/* 디버그 필요하면 body에 debug 클래스 */
 body.debug .ticketHotspot{ outline: 2px solid red; }
 body.debug .topHotspot{ outline: 2px solid blue; }
 body.debug .gateBox{ outline: 2px solid lime; }
